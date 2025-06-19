@@ -1,0 +1,16 @@
+# python .gitignore
+
+# Ignore files
+*.pyc
+__pycache__
+.DS_Store
+
+# Ignore directories
+build
+dist
+
+# Ignore virtual environment
+venv
+
+# Ignore logs
+*.log
