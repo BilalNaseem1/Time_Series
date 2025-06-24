@@ -2,6 +2,8 @@
 
 Modern Time Series Forecasting with Python - Manu Joseph
 
+[Github](https://github.com/PacktPublishing/Modern-Time-Series-Forecasting-with-Python)
+
 **Part 1:**
 1. Introducing Time Series
 2. Acquiring and Processing Time Series Data
