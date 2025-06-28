@@ -11,7 +11,9 @@ dist
 
 # Ignore virtual environment
 venv
-
+venv/
+.venv/
+./venv
 # Ignore logs
 *.log
 

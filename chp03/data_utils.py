@@ -1,11 +1,26 @@
 import warnings
 from collections import defaultdict
 from datetime import datetime
-import distutils
 import pandas as pd
 from tqdm.autonotebook import tqdm
 import numpy as np
 from pandas.api.types import is_datetime64_any_dtype as is_datetime
+
+# Custom replacement for distutils.util.strtobool
+def strtobool(val):
+    """Convert a string representation of truth to true (1) or false (0).
+    
+    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
+    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
+    'val' is anything else.
+    """
+    val = val.lower()
+    if val in ('y', 'yes', 't', 'true', 'on', '1'):
+        return 1
+    elif val in ('n', 'no', 'f', 'false', 'off', '0'):
+        return 0
+    else:
+        raise ValueError("invalid truth value %r" % (val,))
 
 # https://github.com/rakshitha123/TSForecasting/blob/master/utils/data_loader.py
 # Converts the contents in a .tsf file into a dataframe and returns it along with other meta-data of the dataset: frequency, horizon, whether the dataset contains missing values and whether the series have equal lengths
@@ -60,11 +75,11 @@ def convert_monash_tsf_to_dataframe(
                                 forecast_horizon = int(line_content[1])
                             elif line.startswith("@missing"):
                                 contain_missing_values = bool(
-                                    distutils.util.strtobool(line_content[1])
+                                    strtobool(line_content[1])
                                 )
                             elif line.startswith("@equallength"):
                                 contain_equal_length = bool(
-                                    distutils.util.strtobool(line_content[1])
+                                    strtobool(line_content[1])
                                 )
 
                     else:
@@ -324,22 +339,6 @@ def read_ts_to_compact(
                                     )
                                 else:
                                     all_data[col].append(np.array(info.split("|")))
-                                # arr = np.array(info.split("|"))
-                                # try:
-                                #     int(info[0])
-                                #     # all_data[col].append(
-                                #     #     np.fromstring(info, sep="|", dtype=float)
-                                #     # )
-                                #     all_data[col].append(
-                                #         arr.astype(float)
-                                #     )
-                                #     # all_data[col].append(np.array(list(map(float, info.split("|")))))
-                                # except ValueError:
-                                #     # all_data[col].append(
-                                #     #     np.fromstring(info, sep="|", dtype=str)
-                                #     # )
-                                #     all_data[col].append(arr)
-                                #     # all_data[col].append(np.array(info.split("|")))
     df = pd.DataFrame(all_data)
     for col, typ in zip(col_names, col_types):
         df[col] = df[col].astype(typ)
@@ -392,9 +391,6 @@ def add_freq(idx, freq=None):
     return idx
 
 
-# block_df = read_ts_to_compact("D:\Playground\AdvancedTimeSeriesForecastingBook\Code Dev\data\london_smart_meters\preprocessed\london_smart_meters_merged_block_0-36.ts")
-
-
 def reduce_memory_footprint(df):
     dtypes = df.dtypes
     object_cols = dtypes[dtypes == "object"].index.tolist()
@@ -430,7 +426,7 @@ def as_ndarray(y):
     elif isinstance(y, np.ndarray):
         return y
     else:
-        raise ValueError("`y` should be pd.SEries, pd.DataFrame, or np.ndarray to cast to np.ndarray")
+        raise ValueError("`y` should be pd.Series, pd.DataFrame, or np.ndarray to cast to np.ndarray")
 
 def is_datetime_dtypes(x):
     return is_datetime(x)

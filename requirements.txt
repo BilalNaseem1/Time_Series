@@ -5,9 +5,9 @@ matplotlib
 seaborn
 statsmodels
 plotly
-timesynth
 nbformat
 pyarrow
 tqdm
 missingno
-sklearn
+scikit-learn
+setuptools
