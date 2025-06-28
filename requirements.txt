@@ -11,3 +11,4 @@ tqdm
 missingno
 scikit-learn
 setuptools
+jupyter
