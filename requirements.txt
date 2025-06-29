@@ -12,3 +12,5 @@ missingno
 scikit-learn
 setuptools
 jupyter
+darts
+humanize
